@@ -30,7 +30,6 @@ export const RegisterForm = ({ changeForm }) => {
     } else {
       firebase.auth()
         .createUserWithEmailAndPassword(forData.email, forData.password)
-        .then((response) => { setForData(response) })
         .catch(() => {
           setForError({
             email: true,
