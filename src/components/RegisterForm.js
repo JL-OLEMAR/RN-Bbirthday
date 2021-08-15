@@ -1,9 +1,35 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { StyleSheet, TextInput, TouchableOpacity, Text, View } from 'react-native'
 
+import { validateEmail } from '../utils/validations'
+
+const defaultValue = () => {
+  return {
+    email: '',
+    password: '',
+    repeatPassword: ''
+  }
+}
+
 export const RegisterForm = ({ changeForm }) => {
+  const [forData, setForData] = useState(defaultValue)
+  const [forError, setForError] = useState({})
+
   const register = () => {
-    console.log('Registrando...')
+    const errors = {}
+    if (!forData.email || !forData.password || !forData.repeatPassword) {
+      if (!forData.email) errors.email = true
+      if (!forData.password) errors.password = true
+      if (!forData.repeatPassword) errors.repeatPassword = true
+    } else if (!validateEmail(forData.email)) {
+      errors.email = true
+    } else if ((forData.password !== forData.repeatPassword) && (forData.password.length < 6)) {
+      errors.password = true
+      errors.repeatPassword = true
+    } else {
+      console.log('Formulario correcto')
+    }
+    setForError(errors)
   }
 
   return (
@@ -14,7 +40,8 @@ export const RegisterForm = ({ changeForm }) => {
         keyboardType='email-address'
         placeholder='Correo electronico'
         placeholderTextColor='#969696'
-        style={styles.txtInput}
+        style={[styles.txtInput, forError.email && styles.errorInput]}
+        onChange={e => setForData({ ...forData, email: e.nativeEvent.text })}
       />
 
       <TextInput
@@ -24,7 +51,8 @@ export const RegisterForm = ({ changeForm }) => {
         placeholder='Contraseña'
         placeholderTextColor='#969696'
         secureTextEntry
-        style={styles.txtInput}
+        style={[styles.txtInput, forError.password && styles.errorInput]}
+        onChange={e => setForData({ ...forData, password: e.nativeEvent.text })}
       />
 
       <TextInput
@@ -34,7 +62,8 @@ export const RegisterForm = ({ changeForm }) => {
         placeholder='Repetir contraseña'
         placeholderTextColor='#969696'
         secureTextEntry
-        style={styles.txtInput}
+        style={[styles.txtInput, forError.repeatPassword && styles.errorInput]}
+        onChange={e => setForData({ ...forData, repeatPassword: e.nativeEvent.text })}
       />
 
       <TouchableOpacity onPress={register} activeOpacity={0.8}>
@@ -71,5 +100,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-end',
     marginBottom: 15
+  },
+  errorInput: {
+    borderColor: '#940c0c'
   }
 })
