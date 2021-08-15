@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { SafeAreaView, Text, LogBox, StyleSheet, StatusBar } from 'react-native'
+import { SafeAreaView, Text, LogBox, StyleSheet, StatusBar, View, Button } from 'react-native'
 import 'firebase/auth'
 
 import firebase from './src/utils/firebase'
@@ -12,9 +12,7 @@ const App = () => {
   const [user, setUser] = useState(undefined)
 
   useEffect(() => {
-    firebase.auth().onAuthStateChanged((response) => {
-      setUser(response)
-    })
+    firebase.auth().onAuthStateChanged((response) => { setUser(response) })
   }, [])
 
   if (user === undefined) return null
@@ -23,13 +21,26 @@ const App = () => {
     <>
       <StatusBar barStyle='light-content' />
       <SafeAreaView style={styles.background}>
-        {user ? <Text>Estas logeado</Text> : <Auth />}
+        {user ? <Logout /> : <Auth />}
       </SafeAreaView>
     </>
   )
 }
 
 export default App
+
+const Logout = () => {
+  const logout = () => {
+    firebase.auth().signOut()
+  }
+
+  return (
+    <View>
+      <Text>Estas logeado</Text>
+      <Button title='Cerrar sesión' onPress={logout} />
+    </View>
+  )
+}
 
 const styles = StyleSheet.create({
   background: {
