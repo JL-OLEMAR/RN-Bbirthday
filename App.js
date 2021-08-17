@@ -1,12 +1,20 @@
 import React, { useEffect, useState } from 'react'
-import { SafeAreaView, Text, LogBox, StyleSheet, StatusBar, View, Button } from 'react-native'
+import { SafeAreaView, LogBox, StyleSheet, StatusBar } from 'react-native'
+import { decode, encode } from 'base-64'
+import firebase from './src/utils/firebase'
 import 'firebase/auth'
 
-import firebase from './src/utils/firebase'
 import { Auth } from './src/components/Auth'
+import { ListBirthday } from './src/components/ListBirthday'
 
-// Para ignorar los warnings del 'AsyncStorage'
-LogBox.ignoreLogs(['AsyncStorage has been extracted'])
+// Para ignorar los warnings'
+LogBox.ignoreLogs([
+  'AsyncStorage has been extracted',
+  'Setting a timer for a long period of time'
+])
+
+if (!global.btoa) global.btoa = encode
+if (!global.atob) global.atob = decode
 
 const App = () => {
   const [user, setUser] = useState(undefined)
@@ -21,26 +29,13 @@ const App = () => {
     <>
       <StatusBar barStyle='light-content' />
       <SafeAreaView style={styles.background}>
-        {user ? <Logout /> : <Auth />}
+        {user ? <ListBirthday user={user} /> : <Auth />}
       </SafeAreaView>
     </>
   )
 }
 
 export default App
-
-const Logout = () => {
-  const logout = () => {
-    firebase.auth().signOut()
-  }
-
-  return (
-    <View>
-      <Text>Estas logeado</Text>
-      <Button title='Cerrar sesión' onPress={logout} />
-    </View>
-  )
-}
 
 const styles = StyleSheet.create({
   background: {
