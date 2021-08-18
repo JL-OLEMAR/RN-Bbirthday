@@ -39,7 +39,7 @@ export const AddBirthday = ({ user, setShowList, setReloadData }) => {
       firestore().collection(user.uid)
         .add(data)
         .then(() => {
-          // setReloadData(true)
+          setReloadData(true)
           setShowList(true)
         })
         .catch(() => {
