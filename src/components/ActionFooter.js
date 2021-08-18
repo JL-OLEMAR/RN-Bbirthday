@@ -1,10 +1,9 @@
 import React from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import auth from '@react-native-firebase/auth'
 
-import firebase from '../utils/firebase'
-
-export const ActionBar = ({ showList, setShowList }) => {
-  const logout = () => firebase.auth().signOut()
+export const ActionFooter = ({ showList, setShowList }) => {
+  const logout = () => auth().signOut()
   const isShowList = () => setShowList(!showList)
 
   return (

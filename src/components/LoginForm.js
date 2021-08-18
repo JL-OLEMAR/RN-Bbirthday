@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-
-import firebase from '../utils/firebase'
+import auth from '@react-native-firebase/auth'
 import { validateEmail } from '../utils/validations'
 
 export const LoginForm = ({ changeForm }) => {
@@ -16,7 +15,7 @@ export const LoginForm = ({ changeForm }) => {
     } else if (!validateEmail(forData.email)) {
       errors.email = true
     } else {
-      firebase.auth()
+      auth()
         .signInWithEmailAndPassword(forData.email, forData.password)
         .then((response) => { setForData(response) })
         .catch(() => {

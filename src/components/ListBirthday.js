@@ -1,14 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
+import firestore from '@react-native-firebase/firestore'
 
 import { AddBirthday } from './AddBirthday'
-import { ActionBar } from './ActionBar'
-import firebase from '../utils/firebase'
-import 'firebase/firestore'
-
-firebase.firestore().settings({ merge: true }) // por cable usb
-firebase.firestore().settings({ merge: true, experimentalForceLongPolling: true }) // para emulador
-const db = firebase.firestore(firebase)
+import { ActionFooter } from './ActionFooter'
 
 export const ListBirthday = ({ user }) => {
   const [showList, setShowList] = useState(true)
@@ -18,7 +13,7 @@ export const ListBirthday = ({ user }) => {
 
   useEffect(() => {
     setBirthday([])
-    db.collection(user.uid)
+    firestore().collection(user.uid)
       .orderBy('dateBirth', 'asc')
       .get()
       .then((response) => {
@@ -47,7 +42,7 @@ export const ListBirthday = ({ user }) => {
           )
         : (<AddBirthday user={user} setShowList={setShowList} />)}
 
-      <ActionBar showList={showList} setShowList={setShowList} />
+      <ActionFooter showList={showList} setShowList={setShowList} />
     </View>
   )
 }

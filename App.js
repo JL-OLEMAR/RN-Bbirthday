@@ -1,30 +1,33 @@
 import React, { useEffect, useState } from 'react'
-import { SafeAreaView, LogBox, StyleSheet, StatusBar } from 'react-native'
+import { SafeAreaView, StyleSheet, StatusBar, LogBox } from 'react-native'
 import { decode, encode } from 'base-64'
-import firebase from './src/utils/firebase'
-import 'firebase/auth'
+import auth from '@react-native-firebase/auth'
 
 import { Auth } from './src/components/Auth'
 import { ListBirthday } from './src/components/ListBirthday'
 
 // Para ignorar los warnings'
-LogBox.ignoreLogs([
-  'AsyncStorage has been extracted',
-  'Setting a timer for a long period of time',
-  '@firebase/firestore: Firestore (8.8.1)'
-])
+LogBox.ignoreAllLogs()
 
 if (!global.btoa) global.btoa = encode
 if (!global.atob) global.atob = decode
 
 const App = () => {
-  const [user, setUser] = useState(undefined)
+  // Set an initializing state whilst Firebase connects
+  const [initializing, setInitializing] = useState(true)
+  const [user, setUser] = useState()
+
+  const onAuthStateChanged = (user) => {
+    setUser(user)
+    if (initializing) setInitializing(false)
+  }
 
   useEffect(() => {
-    firebase.auth().onAuthStateChanged((response) => { setUser(response) })
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged)
+    return subscriber // unsubscribe on unmount
   }, [])
 
-  if (user === undefined) return null
+  if (initializing) return null
 
   return (
     <>

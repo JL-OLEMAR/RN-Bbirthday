@@ -1,16 +1,9 @@
 import React, { useState } from 'react'
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import firestore from '@react-native-firebase/firestore'
 import DateTimePickerModal from 'react-native-modal-datetime-picker'
 import moment from 'moment'
 import 'moment/locale/es'
-
-import AsyncStorage from '@react-native-community/async-storage'
-import firebase from '../utils/firebase'
-import 'firebase/firestore'
-
-firebase.firestore().settings({ merge: true }) // por cable usb
-firebase.firestore().settings({ merge: true, experimentalForceLongPolling: true }) // para emulador
-const db = firebase.firestore(firebase)
 
 export const AddBirthday = ({ user, setShowList, setReloadData }) => {
   const [formData, setFormData] = useState({})
@@ -43,7 +36,7 @@ export const AddBirthday = ({ user, setShowList, setReloadData }) => {
     } else {
       const data = formData
       data.dateBirth.setYear(0)
-      db.collection(user.uid)
+      firestore().collection(user.uid)
         .add(data)
         .then(() => {
           // setReloadData(true)

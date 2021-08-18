@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { StyleSheet, TextInput, TouchableOpacity, Text, View } from 'react-native'
-
-import firebase from '../utils/firebase'
+import auth from '@react-native-firebase/auth'
 import { validateEmail } from '../utils/validations'
 
 const defaultValue = () => {
@@ -28,7 +27,7 @@ export const RegisterForm = ({ changeForm }) => {
       errors.password = true
       errors.repeatPassword = true
     } else {
-      firebase.auth()
+      auth()
         .createUserWithEmailAndPassword(forData.email, forData.password)
         .catch(() => {
           setForError({
