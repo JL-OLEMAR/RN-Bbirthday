@@ -10,7 +10,8 @@ import { ListBirthday } from './src/components/ListBirthday'
 // Para ignorar los warnings'
 LogBox.ignoreLogs([
   'AsyncStorage has been extracted',
-  'Setting a timer for a long period of time'
+  'Setting a timer for a long period of time',
+  '@firebase/firestore: Firestore (8.8.1)'
 ])
 
 if (!global.btoa) global.btoa = encode

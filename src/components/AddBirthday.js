@@ -3,6 +3,8 @@ import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-nativ
 import DateTimePickerModal from 'react-native-modal-datetime-picker'
 import moment from 'moment'
 import 'moment/locale/es'
+
+import AsyncStorage from '@react-native-community/async-storage'
 import firebase from '../utils/firebase'
 import 'firebase/firestore'
 
